@@ -9,111 +9,24 @@ from tkinter import messagebox
 from youtube_search import YoutubeSearch
 import webbrowser
 import json
+import tkinter.filedialog as tkFileDialog
 
+languages = {'af': 'Afrikaans', 'ar': 'Arabic', 'bn-BD': 'Bengali', 'bs-Latn': 'Bosnian', 'bg': 'Bulgarian', 'ca': 'Catalan', 'zh-Hans': 'Chinese (Simplified)', 'zh-Hant': 'Chinese (Traditional)', 'hr': 'Croatian', 'cs': 'Czech', 'da': 'Danish', 'nl': 'Dutch', 'en': 'English', 'et': 'Estonian', 'fj': 'Fijian', 'fil': 'Filipino', 'fi': 'Finnish', 'fr': 'French', 'ka': 'Georgian', 'de': 'German', 'el': 'Greek', 'ht': 'Haitian Creole', 'he': 'Hebrew', 'hi': 'Hindi', 'hmn': 'Hmong Daw', 'hu': 'Hungarian', 'is': 'Icelandic', 'id': 'Indonesian', 'ga': 'Irish', 'it': 'Italian', 'ja': 'Japanese', 'ko': 'Korean', 'ku': 'Kurdish (Kurmanji)', 'lv': 'Latvian', 'lt': 'Lithuanian', 'lb': 'Luxembourgish', 'mk': 'Macedonian', 'mg': 'Malagasy', 'ms': 'Malay', 'ml': 'Malayalam', 'mt': 'Maltese', 'mi': 'Maori', 'no': 'Norwegian', 'ps': 'Pashto', 'fa': 'Persian', 'pl': 'Polish', 'pt': 'Portuguese', 'pa': 'Punjabi', 'ro': 'Romanian', 'ru': 'Russian', 'sm': 'Samoan', 'sr-Latn': 'Serbian', 'sk': 'Slovak', 'sl': 'Slovenian', 'es': 'Spanish', 'su': 'Sundanese', 'sw': 'Swahili', 'sv': 'Swedish', 'ta': 'Tamil', 'te': 'Telugu', 'th': 'Thai', 'tr': 'Turkish', 'uk': 'Ukrainian', 'ur': 'Urdu', 'vi': 'Vietnamese', 'cy': 'Welsh'}
 
-languages = {
-	'af': 'Afrikaans',
-	'sq': 'Albanian',
-	'ar': 'Arabic',
-	'hy': 'Armenian',
-	'bn-BD': 'Bengali',
-	'bs-Latn': 'Bosnian',
-	'bg': 'Bulgarian',
-	'ca': 'Catalan',
-	'ny': 'Chichewa',
-	'zh-Hans': 'Chinese (Simplified)',
-	'zh-Hant': 'Chinese (Traditional)',
-	'co': 'Corsican',
-	'hr': 'Croatian',
-	'cs': 'Czech',
-	'da': 'Danish',
-	'nl': 'Dutch',
-	'en': 'English',
-	'et': 'Estonian',
-	'tl': 'Filipino',
-	'fi': 'Finnish',
-	'fr': 'French',
-	'fy': 'Frisian',
-	'gl': 'Falician',
-	'ka': 'Georgian',
-	'de': 'German',
-	'el': 'Greek',
-	'gu': 'Gujarati',
-	'ht': 'Haitian Creole',
-	'ha': 'Hausa',
-	'haw': 'Hawaiian',
-	'hi': 'Hindi',
-	'hmn': 'Hmong',
-	'hu': 'Hungarian',
-	'is': 'Icelandic',
-	'ig': 'Igbo',
-	'id': 'Indonesian',
-	'ga': 'Irish',
-	'it': 'Italian',
-	'ja': 'Japanese',
-	'jw': 'Javanese',
-	'kn': 'Kannada',
-	'kk': 'Kazakh',
-	'km': 'Khmer',
-	'ko': 'Korean',
-	'ku': 'Kurdish (Kurmanji)',
-	'ky': 'Kyrgyz',
-	'lo': 'Lao',
-	'la': 'Latin',
-	'lv': 'Latvian',
-	'lt': 'Lithuanian',
-	'lb': 'Luxembourgish',
-	'mk': 'Macedonian',
-	'mg': 'Malagasy',
-	'ms': 'Malay',
-	'ml': 'Malayalam',
-	'mt': 'Maltese',
-	'mi': 'Maori',
-	'mr': 'Marathi',
-	'my': 'Myanmar (Burmese)',
-	'ne': 'Nepali',
-	'no': 'Norwegian',
-	'ps': 'Pashto',
-	'fa': 'Persian',
-	'pl': 'Polish',
-	'pt': 'Portuguese',
-	'pa': 'Punjabi',
-	'ro': 'Romanian',
-	'ru': 'Russian',
-	'sm': 'Samoan',
-	'gd': 'Scots Gaelic',
-	'sr-Latn': 'Serbian',
-	'st': 'Sesotho',
-	'sn': 'Shona',
-	'sd': 'Sindhi',
-	'si': 'Sinhala',
-	'sk': 'Slovak',
-	'sl': 'Slovenian',
-	'so': 'Somali',
-	'es': 'Spanish',
-	'su': 'Sundanese',
-	'sw': 'Swahili',
-	'sv': 'Swedish',
-	'tg': 'Tajik',
-	'ta': 'Tamil',
-	'te': 'Telugu',
-	'th': 'Thai',
-	'tr': 'Turkish',
-	'uk': 'Ukrainian',
-	'ur': 'Urdu',
-	'uz': 'Uzbek',
-	'vi': 'Vietnamese',
-	'cy': 'Welsh',
-	'xh': 'Xhosa',
-	'yi': 'Yiddish',
-	'yo': 'Yoruba',
-	'zu': 'Zulu',
-	'fj': 'Fijian',
-	'fil': 'Filipino',
-	'he': 'Hebrew'
-}
+def saveas(lyrics, title, fileName):
+	savelocation=tkFileDialog.asksaveasfilename(defaultextension=".txt", initialfile=fileName)
+	file1=open(savelocation, "w")
+	file1.write(title + "\n" + lyrics) 
+	file1.close()
 
-
+def longestLine(list1):
+	lyricsByLine = list1.split('\n')
+	longestLineLength = 0
+	for i in lyricsByLine:
+		if i != None and len(i) > longestLineLength:
+			longestLineLength = len(i)
+	longestLineLength = longestLineLength*6.2+10
+	return longestLineLength
 
 def listToString(s):  
 	str1 = "" 
@@ -149,52 +62,68 @@ def translateNow():
 	
 	songT = str(songTitle.get())
 	artistT= str(artistTitle.get())
-	
-	print(artistT)
-	print(songT)
+
 	gotLyrics = listToString(lyrics(artistT, songT))
 	
 	langKey=str(get_key(langOptMenu.get(), languages))
-	
 
 	if len(gotLyrics) == 0:
-		messagebox.showerror(title="Song Not Found", message="Please enter another song, that song wasn't found")
-		print("Hello")
+		messagebox.showerror(title=ts.bing("Song Not Found", from_language='auto', to_language=getNativeLang()).title(), message=ts.bing("Please enter another song, that song wasn't found.", from_language='auto', to_language=getNativeLang()))
 	elif len(gotLyrics)>0:
 		result = ts.bing(gotLyrics, from_language='auto', to_language=langKey)
-		print("Hell1o")
-		lyricsByLine = result.split('\n')
-		print(lyricsByLine)
-		longestLineLength = 0
-		for i in lyricsByLine:
-			if i != None and len(i) > longestLineLength:
-				longestLineLength = len(i)
-		longestLineLength = longestLineLength*6.2+10
+		newOriginalLyrics = gotLyrics.replace('\r','')
+		newOriginalLyrics = '\n'.join(newOriginalLyrics.split('\n')[1:])
+		longestLineTotal = longestLine(result)+longestLine(newOriginalLyrics)+20
+
+		saveTitle = songT.title()+"_"+artistT.title()+"_"+ts.bing(langOptMenu.get().title(), from_language='auto', to_language=getNativeLang())
+		saveTitle = saveTitle.replace(" ","_")
 		
 		master2 = tk.Tk()
+		master2.title(ts.bing("Translated Lyrics for ", from_language='auto', to_language=getNativeLang()).title()+songT.title()+ts.bing(" by ", from_language='auto', to_language=getNativeLang()).title()+artistT.title())
 		styleMaster2 = ttk.Style(master2)
 		styleMaster2.theme_use('default')
 		styleMaster2.configure("2orange.TButton", background='#ff8f00',foreground="black", font=("System", 20))
 		styleMaster2.configure("2orange.TLabel", foreground='#ff8f00',background="white", font=("System", 12),anchor='center', justify='center', align='center')
 		styleMaster2.configure("2orangeTitle.TLabel", foreground='#ff8f00',background="white", font=("System", 20),anchor='center', justify='center', align='center')
 
-		canvas = tk.Canvas(master2, height=800, width=longestLineLength)
+		canvas = tk.Canvas(master2, height=800, width=longestLineTotal)
 		scroll_y = Scrollbar(master2, orient="vertical", command=canvas.yview)
 
 		frame = tk.Frame(canvas)
+		
+		titleOriginal = ts.bing("Original Lyrics", from_language='auto', to_language=getNativeLang()).title()
+		titleOriginalText = tk.StringVar(master2)
+		titleOriginalText.set(titleOriginal)
+		
+		lyricsOriginalText = tk.StringVar(master2)
+		lyricsOriginalText.set(newOriginalLyrics)
 
-		lyricsText = tk.StringVar(master2)
-		lyricsText.set(result)
+		lyricsTransText = tk.StringVar(master2)
+		lyricsTransText.set(result)
 		
-		titleText = tk.StringVar(master2)
-		titleText.set(songT.title()+" — "+artistT.title())
+		titleTrans = ts.bing("Lyrics in "+langOptMenu.get(), from_language='auto', to_language=getNativeLang()).title()
+		titleTransText = tk.StringVar(master2)
+		titleTransText.set(titleTrans)
 		
-		labelTitle = Label(frame, textvariable=titleText, style="2orangeTitle.TLabel")
-		labelLyrics = Label(frame, textvariable=lyricsText, style="2orange.TLabel")
-		Button(frame, text="Open Song in New Tab", command=open_Youtube_link, style="2orange.TButton").grid(column=0, row=2, columnspan=3, padx=10, pady=10)
+		labelOriginalTitle = Label(frame, textvariable=titleOriginalText, style="2orangeTitle.TLabel")
+		labelOriginalLyrics = Label(frame, textvariable=lyricsOriginalText, style="2orange.TLabel", borderwidth = 3,
+			relief="ridge")
 		
-		labelTitle.grid(column=0, row=0, columnspan=3, padx=10, pady=10, sticky="nsew")
-		labelLyrics.grid(column=0, row=1, columnspan=3, padx=10, pady=10, sticky="nsew")
+		labelTransTitle = Label(frame, textvariable=titleTransText, style="2orangeTitle.TLabel")
+		labelTransLyrics = Label(frame, textvariable=lyricsTransText, style="2orange.TLabel", borderwidth = 3,
+			relief="ridge")
+		
+		youtubeText = ts.bing("Open Song in New Tab", from_language='auto', to_language=getNativeLang()).title()
+		
+		downloadText = ts.bing("Download Translated Lyrics", from_language='auto', to_language=getNativeLang()).title()
+		
+		Button(frame, text=youtubeText, command=open_Youtube_link, style="2orange.TButton").grid(column=0, row=3, columnspan=2, padx=10, pady=10)
+		Button(frame, text=downloadText, command=lambda: saveas(result, songT+" - "+artistT, saveTitle), style="2orange.TButton").grid(column=0, row=2, columnspan=2, padx=10, pady=10)
+		
+		labelOriginalTitle.grid(column=0, row=0, padx=10, pady=10, sticky="nsew")
+		labelOriginalLyrics.grid(column=0, row=1, padx=10, pady=10, sticky="nsew", ipadx=10)
+		labelTransTitle.grid(column=1, row=0, padx=10, pady=10, sticky="nsew")
+		labelTransLyrics.grid(column=1, row=1, padx=10, pady=10, sticky="nsew", ipadx=10)
 		canvas.create_window((0, 0), anchor='center', window=frame)
 		canvas.update_idletasks()
 		canvas.configure(scrollregion=canvas.bbox('all'), yscrollcommand=scroll_y.set)
@@ -212,13 +141,16 @@ def open_Youtube_link():
 		
 def saveNativeLang():
 	nativeLangFile = open("native_lang.txt", "w")
-	print(get_key(langOptMenu2.get(), languages))
 	nativeLangFile.write(get_key(langOptMenu2.get(), languages))
 	nativeLangFile.close()
 	master3.destroy()
 	tkinter_run()
 
 def reOpenSettings():
+	master.destroy()
+	nativeLangFileSettings = open("native_lang_settings.txt", "w")
+	nativeLangFileSettings.write(getNativeLang())
+	nativeLangFileSettings.close()
 	nativeLangFile = open("native_lang.txt", "w")
 	nativeLangFile.write('0')
 	nativeLangFile.close()
@@ -226,11 +158,14 @@ def reOpenSettings():
 	
 
 def getNativeLang():
-	global langOptMenu2
 	nativeLangFileRead = open("native_lang.txt", "r")
 	nativeFileContent = nativeLangFileRead.read()
-	print(str(nativeFileContent)+"yes")
 	return str(nativeFileContent)
+
+def getSettingsLang():
+	nativeLangSettingsFileRead = open("native_lang_settings.txt", "r")
+	nativeSettingsFileContent = nativeLangSettingsFileRead.read()
+	return str(nativeSettingsFileContent)
 
 def tkinter_run():
 	global langOptMenu2
@@ -239,21 +174,20 @@ def tkinter_run():
 	global langOptMenu
 	global master3
 	global nativeLang
-	
-	print (is_value(getNativeLang(), languages))
+	global master
+			
+	if is_value(getNativeLang(), languages):
 		
-	if is_value(getNativeLang(), languages):	
-		
-		print(getNativeLang())
 		nativeLang = getNativeLang()
-		print(nativeLang)
 
 		master = tk.Tk()
+		master.title(ts.bing("Song Search", from_language='en', to_language=nativeLang).title())
 		style2 = ttk.Style(master)
 		style2.theme_use('default')
 
 		style2.configure("2orange.horizontal.TEntry", foreground='#ff8f00', font=("System", 20))
 		style2.configure("2orange.TButton", background='#ff8f00',foreground="black", font=("System", 20))
+		style2.configure("2orangeSettings.TButton", background='#ff8f00',foreground="black", font=("System", 10))
 		style2.configure("2orange.TLabel", foreground='#ff8f00',background="white", font=("System", 20))
 		style2.configure("2orange.TMenubutton", foreground='#ff8f00',background="white", width="5", font=("System", 20))
 			
@@ -261,33 +195,39 @@ def tkinter_run():
 		
 		langOptMenu = tk.StringVar(master)
 		langOptMenu.set(langList[0])
-		lang = ttk.OptionMenu(master, langOptMenu, *langList, style="2orange.TMenubutton")
+		lang = ttk.OptionMenu(master, langOptMenu, langList[0], *langList, style="2orange.TMenubutton")
 
 		songLabelText = ts.bing("Enter the Song Title:", from_language='en', to_language=nativeLang)
 		artistLabelText = ts.bing("Enter the Artist Title:", from_language='en', to_language=nativeLang)
 		destinationLabelText = ts.bing("Enter the Destination Language:", from_language='en', to_language=nativeLang)
 		translateButtonText = ts.bing("Translate", from_language='en', to_language=nativeLang)
-		Label(master, text=songLabelText, style="2orange.TLabel").grid(row=0, column=0, pady='5px', padx='10px')
-		Label(master, text=artistLabelText, style="2orange.TLabel").grid(row=1, column=0, pady='5px', padx='10px')
-		Label(master, text=destinationLabelText, style="2orange.TLabel").grid(row=2, column=0, pady='5px', padx='10px')
+		Label(master, text=songLabelText, style="2orange.TLabel").grid(row=0, column=0, columnspan=2, pady='5px', padx='10px')
+		Label(master, text=artistLabelText, style="2orange.TLabel").grid(row=1, column=0, columnspan=2, pady='5px', padx='10px')
+		Label(master, text=destinationLabelText, style="2orange.TLabel").grid(row=2, column=0,columnspan=2, pady='5px', padx='10px')
 
 		songTitle = Entry(master, width=15,style='2orange.horizontal.TEntry',font=("System", 20))
 		artistTitle = Entry(master, width=15,style='2orange.horizontal.TEntry',font=("System", 20))
 
-		Button(master, text=translateButtonText, command=translateNow, style='2orange.TButton').grid(row=3, column=0, columnspan=2, pady='10px', padx='10px')
+		Button(master, text=translateButtonText, command=translateNow, style='2orange.TButton').grid(row=3, column=0, columnspan=4, pady='10px', padx='10px')
+		
+		settingsButtonText = ts.bing("Settings", from_language='en', to_language=nativeLang)
+		photo = tk.PhotoImage(file = r"settings.png")
+		Button(master, text = settingsButtonText+" ", image = photo, command=reOpenSettings, compound='right', style='2orangeSettings.TButton').grid(row=3, column=3, pady='10px')
+		
 
 		lang.config(width=15)
 		songTitle.config(width=15)
 		artistTitle.config(width=15)
-		songTitle.grid(row=0, column=1, pady='5px', padx='10px')
-		artistTitle.grid(row=1, column=1, pady='5px', padx='10px')
-		lang.grid(row=2, column=1, pady='5px', padx='10px')
+		songTitle.grid(row=0, column=2,columnspan=2, pady='5px', padx='10px')
+		artistTitle.grid(row=1, column=2,columnspan=2, pady='5px', padx='10px')
+		lang.grid(row=2, column=2,columnspan=2, pady='5px', padx='10px')
 
 
 		master.mainloop()
 
 	else:
 		master3 = tk.Tk()
+		master3.title(ts.bing("Settings", from_language='auto', to_language=getSettingsLang()))
 		style3 = ttk.Style(master3)
 		style3.theme_use('default')
 
@@ -302,11 +242,11 @@ def tkinter_run():
 
 		langOptMenu2 = tk.StringVar(master3)
 		langOptMenu2.set(langList[0])
-		nLangPicker = ttk.OptionMenu(master3, langOptMenu2, *langList, style="3orange.TMenubutton")
+		nLangPicker = ttk.OptionMenu(master3, langOptMenu2, langList[0], *langList, style="3orange.TMenubutton")
 
-		Label(master3, text="Please pick your native language here:", style="3orange.TLabel").grid(row=0, column=0, columnspan=2, pady='5px', padx='10px')
+		Label(master3, text=ts.bing("Please pick your native language here:", from_language='auto', to_language=getSettingsLang()), style="3orange.TLabel").grid(row=0, column=0, columnspan=2, pady='5px', padx='10px')
 
-		Button(master3, text="Enter", command=saveNativeLang, style='3orange.TButton').grid(row=3, column=0, columnspan=2, pady='10px', padx='10px')
+		Button(master3, text=ts.bing("Enter", from_language='auto', to_language=getSettingsLang()), command=saveNativeLang, style='3orange.TButton').grid(row=3, column=0, columnspan=2, pady='10px', padx='10px')
 
 		nLangPicker.config(width=15)
 		nLangPicker.grid(row=2, column=0, columnspan=2, pady='5px', padx='10px')
@@ -315,6 +255,4 @@ def tkinter_run():
 
 		getNativeLang()
 
-
-		
 tkinter_run()
